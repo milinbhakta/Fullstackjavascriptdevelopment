@@ -8,15 +8,6 @@ class App extends React.Component {
   state = { pageHeader: "Naming Contests", contests: this.props.initialContests };
 
   componentDidMount() {
-    axios
-      .get("/api/contests")
-      .then(resp => {
-        console.log(resp.data.contests);
-        this.setState({
-            contests: resp.data.contests
-          });
-      })
-      .catch(console.error());
   }
 
   componentWillUnmount() {}
