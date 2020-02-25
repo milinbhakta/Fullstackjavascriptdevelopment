@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/milinbhakta/Fullstackjavascriptdevelopment#readme",
   "dependencies": {
+    "ejs": "^3.0.1",
     "express": "^4.17.1",
     "mongodb": "^3.5.3",
     "prop-types": "^15.7.2",
