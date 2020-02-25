@@ -2,17 +2,11 @@ import React from "react";
 import Header from "./Header";
 
 class App extends React.Component {
-  state = { pageHeader: 'Naming Contests' };
+  state = { pageHeader: "Naming Contests" };
 
-  componentDidMount(){
-      console.log('Did Mount');
-      debugger;
-  }
+  componentDidMount() {}
 
-  componentWillUnmount(){
-      console.log('Will unmount');
-      debugger;
-  }
+  componentWillUnmount() {}
 
   render() {
     return (
