@@ -5,7 +5,7 @@ import ContestPreview from "./ContestPreview";
 import testData from "../testData.json";
 
 class App extends React.Component {
-  state = { pageHeader: "Naming Contests", contests: [] };
+  state = { pageHeader: "Naming Contests", contests: this.props.initialContests };
 
   componentDidMount() {
     axios
