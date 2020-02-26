@@ -1,45 +1,50 @@
 import React from "react";
-import axios from "axios";
 import Header from "./Header";
-import testData from "../testData.json";
 import ContestList from "./ContestList";
-import ContestPreview from "./ContestPreview";
 import Contest from "./Contest";
+import * as api from "../api";
 
-const pushState = (obj, url) =>{
-  window.history.pushState(obj,'',url);
-};
+const pushState = (obj, url) => window.history.pushState(obj, "", url);
 
 class App extends React.Component {
-  state = { pageHeader: "Naming Contests", contests: this.props.initialContests };
-
-  componentDidMount() {
+  state = {
+    pageHeader: "Naming Contests",
+    contests: this.props.initialContests
+  };
+  componentDidMount() {}
+  componentWillUnmount() {
+    // clean timers, listeners
   }
-
-  componentWillUnmount() {}
-
-  fetchContest = (contestId) => {
-    pushState({currentContestId: contestId},`/contest/${contestId}`);
-    //lookup the contest
-    //this.state.contests[contestId]
-    this.setState({
-      pageHeader:this.state.contests[contestId].contestName,
-      currentContestId:  contestId
+  fetchContest = contestId => {
+    pushState({ currentContestId: contestId }, `/contest/${contestId}`);
+    api.fetchContest(contestId).then(contest => {
+      this.setState({
+        pageHeader: contest.contestName,
+        currentContestId: contest.id,
+        contests: {
+          ...this.state.cotests,
+          [contest.id]: contest
+        }
+      });
     });
   };
-
-  currentContest(){
-    if(this.state.currentContestId){
-      return <Contest {...this.state.contests[this.state.currentContestId]}/>
+  currentContent() {
+    if (this.state.currentContestId) {
+      return <Contest {...this.state.contests[this.state.currentContestId]} />;
     }
-    return <ContestList onContestClick={this.fetchContest} contests={this.state.contests} />
-  }
 
+    return (
+      <ContestList
+        onContestClick={this.fetchContest}
+        contests={this.state.contests}
+      />
+    );
+  }
   render() {
     return (
       <div className="App">
         <Header message={this.state.pageHeader} />
-        {this.currentContest()}
+        {this.currentContent()}
       </div>
     );
   }
