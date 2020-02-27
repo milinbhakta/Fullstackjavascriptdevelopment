@@ -3,7 +3,7 @@ import express from 'express';
 import config from '../config';
 
 import assert from 'assert';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 
 let mdb;
 MongoClient.connect(config.mongodbUri, (err, db) => {
@@ -20,7 +20,6 @@ router.get('/contests', (_req, res) => {
     .collection('contests')
     .find({})
     .project({
-      id: 1,
       categoryName: 1,
       contestName: 1
     })
@@ -30,31 +29,31 @@ router.get('/contests', (_req, res) => {
         res.send({ contests });
         return;
       }
-      contests[contest.id] = contest;
+      contests[contest._id] = contest;
     });
 });
 
 router.get('/names/:nameIds', (req, res) => {
   //req.params.nameIds
-  const nameIds = req.params.nameIds.split(',').map(Number);
+  const nameIds = req.params.nameIds.split(',').map(ObjectID);
   let names = {};
   mdb
     .collection('names')
-    .find({id:{$in:nameIds}})
+    .find({_id:{$in:nameIds}})
     .each((err, name) => {
       assert.equal(null, err);
       if (!name) {
         res.send({ names });
         return;
       }
-      names[name.id] = name;
+      names[name._id] = name;
     });
 });
 
 router.get('/contests/:contestId', (req, res) => {
   mdb
     .collection('contests')
-    .findOne({ id: Number(req.params.contestId) })
+    .findOne({ _id: Number(req.params.contestId) })
     .then(contest => {
       res.send(contest);
     })
