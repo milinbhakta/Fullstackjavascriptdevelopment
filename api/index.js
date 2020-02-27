@@ -27,10 +27,27 @@ router.get('/contests', (_req, res) => {
     .each((err, contest) => {
       assert.equal(null, err);
       if (!contest) {
-        res.send({contests});
+        res.send({ contests });
         return;
       }
       contests[contest.id] = contest;
+    });
+});
+
+router.get('/names/:nameIds', (req, res) => {
+  //req.params.nameIds
+  const nameIds = req.params.nameIds.split(',').map(Number);
+  let names = {};
+  mdb
+    .collection('names')
+    .find({id:{$in:nameIds}})
+    .each((err, name) => {
+      assert.equal(null, err);
+      if (!name) {
+        res.send({ names });
+        return;
+      }
+      names[name.id] = name;
     });
 });
 
